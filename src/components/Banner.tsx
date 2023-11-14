@@ -1,18 +1,20 @@
 "use client";
 
-import React, { useEffect, useState } from 'react'
-import Image from 'next/image'
-import { fetchDataFromStudio, urlFor } from '../../lib/client';
-import Link from 'next/link';
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { fetchDataFromStudio, urlFor } from "../../lib/client";
+import Link from "next/link";
 
 type TBannerData = {
   buttonText: string;
   desc: string;
-  image: { _type: 'image'; asset:{_ref
-    : string
-    _type
-    : 
-    string} }; 
+  image: {
+    _type: "image";
+    asset: {
+      _ref: string;
+      _type: string;
+    };
+  };
   largeText1: string;
   midText: string;
   product: string;
@@ -36,20 +38,21 @@ export default function Banner() {
   //   console.log(products);
   // }, [products]);
 
-  const [bannerData,setBannerData] = useState<TBannerData>();
+  const [bannerData, setBannerData] = useState<TBannerData>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const getBannerData = async() => {
+  const getBannerData = async () => {
     const data = await fetchDataFromStudio("banner");
     setBannerData(data[0]);
-  }
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     getBannerData();
-  },[])
+  }, []);
 
-  useEffect(()=>{
-    console.log(bannerData)
-  },[bannerData])
+  useEffect(() => {
+    console.log(bannerData);
+  }, [bannerData]);
 
   return (
     <div className="hero-banner-container">
@@ -57,7 +60,11 @@ export default function Banner() {
         <p className="beats-solo">{bannerData?.smallText}</p>
         <h3>{bannerData?.midText}</h3>
         <h1>{bannerData?.largeText1}</h1>
-        <Image src={urlFor(bannerData?.image).url()} alt="headphones" className="hero-banner-image" />
+        <Image
+          src={urlFor(bannerData?.image).url()}
+          alt="headphones"
+          className="hero-banner-image"
+        />
 
         <div>
           <Link href={`/product/${bannerData?.product}`}>
@@ -70,5 +77,5 @@ export default function Banner() {
         </div>
       </div>
     </div>
-  )
+  );
 }
